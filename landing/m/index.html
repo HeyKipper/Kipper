@@ -16,7 +16,11 @@ ks();window.addEventListener('resize',ks);window.addEventListener('orientationch
 var sx=null;
 d.addEventListener('touchstart',function(e){var t=e.target.closest&&e.target.closest('#kdeck');sx=(t&&e.touches[0])?e.touches[0].clientX:null;},{passive:true});
 d.addEventListener('touchend',function(e){if(sx===null)return;var c=e.changedTouches&&e.changedTouches[0];var dx=c?c.clientX-sx:0;sx=null;
-if(Math.abs(dx)>40&&window.__kipPlan)window.__kipPlan(window.__kipPlanA+(dx<0?1:-1));},{passive:true});})();</script>
+if(Math.abs(dx)>40&&window.__kipPlan)window.__kipPlan(window.__kipPlanA+(dx<0?1:-1));},{passive:true});
+d.addEventListener('toggle',function(e){var t=e.target;if(t.tagName!=='DETAILS'||!t.open)return;var f=d.getElementById('faq');if(!f||!f.contains(t))return;
+Array.prototype.forEach.call(f.querySelectorAll('details[open]'),function(x){if(x!==t)x.removeAttribute('open');});},true);
+d.addEventListener('click',function(e){var f=d.getElementById('faq');if(!f)return;var op=f.querySelector('details[open]');if(!op)return;
+var sm=op.querySelector('summary');if(sm&&sm.contains(e.target))return;op.removeAttribute('open');});})();</script>
 </head>
 <body>
 <x-dc>
@@ -41,6 +45,9 @@ html.kbopen{scroll-snap-type:none}
 .kipsec>h2{margin-bottom:6px!important}
 .kherobg{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0;pointer-events:none;opacity:.5}
 .kcard{transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .35s ease}
+#faq details[open]::before{content:'';position:fixed;inset:0;background:rgba(30,27,22,.5);z-index:190;animation:kfade .2s ease both}
+#faq details[open]>p{position:fixed;left:16px;right:16px;top:50%;transform:translateY(-50%);z-index:191;margin:0;background:#FFFDF8;border-radius:26px;padding:26px 24px;font-size:18px;line-height:1.55;max-height:70svh;overflow:auto;box-shadow:0 30px 60px rgba(30,27,22,.35);animation:kpop .25s cubic-bezier(.2,.8,.2,1) both}
+#faq details[open]>p::after{content:'tap anywhere to close';display:block;margin-top:18px;font-family:'Caveat',cursive;font-size:19px;color:#7A7166}
 @media (prefers-reduced-motion:reduce){.kcard{transition:none}}
 #top>*:not(.kherobg){position:relative;z-index:2}
 .knav{scroll-snap-align:start}
@@ -163,8 +170,8 @@ call grandma back sunday!!
 <sc-for list="{{sections}}" as="s" hint-placeholder-count="8">
 <div class="kipsec ksnap" data-kidx="{{s.idx}}" style="padding: 18px 14px 20px; display: flex; flex-direction: column; gap: 14px;">
 <h2 class="kipfg" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 31px; line-height: 1.05; letter-spacing: -0.5px; text-align: center;">{{s.title}}</h2>
-<div class="kipbg" aria-hidden="true" style="height: calc({{s.collageH}}px * var(--kscale) * 0.8);">
-<div style="height: {{s.collageH}}px;">
+<div class="kipbg" aria-hidden="true" style="height: calc({{s.collageH}}px * var(--kscale) * {{s.bgF}});">
+<div style="top: {{s.bgTop}}px; height: {{s.collageH}}px;">
 <sc-for list="{{s.items}}" as="it" hint-placeholder-count="3">
 <div class="scrap" style="position: absolute; left: {{it.x}}px; top: {{it.y}}px; width: {{it.w}}px; transform: translateY({{it.dy}}px) rotate({{it.r}}deg); opacity: {{it.op}}; transition-delay: {{it.delay}}ms;">
 
@@ -249,16 +256,16 @@ call grandma back sunday!!
 </sc-for>
 </div>
 </div>
-<div class="kipfg" style="display: flex; flex-direction: column; gap: 9px; margin-top: 4px;">
+<div class="kipfg" style="display: flex; flex-direction: column; gap: 7px; margin-top: 4px;">
 <sc-for list="{{s.msgs}}" as="m" hint-placeholder-count="2">
 <sc-if value="{{m.me}}" hint-placeholder-val="{{ true }}">
-<div style="align-self: flex-end; display: flex; align-items: flex-end; gap: 10px; max-width: 94%; margin-top: {{m.mt}}px;"><div class="bub bme {{m.sz}}" style="max-width: 100%;">{{m.text}}<sc-if value="{{m.caret}}" hint-placeholder-val="{{ false }}"><span class="kcaret" style="display: inline-block; width: 2px; height: 24px; margin-left: 2px; vertical-align: -4px; background: #FFFFFF;"></span></sc-if><sc-if value="{{m.hasReacts}}" hint-placeholder-val="{{ false }}"><div class="ktap"><sc-for list="{{m.reacts}}" as="rx" hint-placeholder-count="2"><span>{{rx}}</span></sc-for></div></sc-if></div><img src="/_img/a3faaa945f06dc3b6d9c63bece4aa09b.jpg" alt="Alex" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0;"></div>
+<div style="align-self: flex-end; display: flex; align-items: flex-end; gap: 16px; max-width: 94%; margin-top: {{m.mt}}px;"><div class="bub bme {{m.sz}}" style="max-width: 100%;">{{m.text}}<sc-if value="{{m.caret}}" hint-placeholder-val="{{ false }}"><span class="kcaret" style="display: inline-block; width: 2px; height: 24px; margin-left: 2px; vertical-align: -4px; background: #FFFFFF;"></span></sc-if><sc-if value="{{m.hasReacts}}" hint-placeholder-val="{{ false }}"><div class="ktap"><sc-for list="{{m.reacts}}" as="rx" hint-placeholder-count="2"><span>{{rx}}</span></sc-for></div></sc-if></div><img src="/_img/a3faaa945f06dc3b6d9c63bece4aa09b.jpg" alt="Alex" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0;"></div>
 </sc-if>
 <sc-if value="{{m.delivered}}" hint-placeholder-val="{{ false }}">
-<div style="align-self: flex-end; margin: -6px 52px 0 0; font-family: -apple-system, 'SF Pro Text', sans-serif; font-size: 13px; font-weight: 600; color: #8A8A8E;">Delivered</div>
+<div style="align-self: flex-end; margin: -6px 58px 0 0; font-family: -apple-system, 'SF Pro Text', sans-serif; font-size: 13px; font-weight: 600; color: #8A8A8E;">Delivered</div>
 </sc-if>
 <sc-if value="{{m.kip}}" hint-placeholder-val="{{ false }}">
-<div style="align-self: flex-start; display: flex; align-items: flex-end; gap: 10px; max-width: 94%;"><span style="display: block; width: 40px; height: 40px; flex-shrink: 0; margin-bottom: -2px;"><x-import component-from-global-scope="Kipper.KipperLive" expr="{{m.kexpr}}" size="{{sz40}}"></x-import></span><div class="bub bkg ksm" style="max-width: 100%;"><sc-if value="{{m.typing}}" hint-placeholder-val="{{ false }}"><span style="display: flex; gap: 6px; padding: 6px 2px;" aria-label="Kipper is typing"><span class="kdot" style="width: 10px; height: 10px; border-radius: 50%; background: #8E8E93;"></span><span class="kdot" style="width: 10px; height: 10px; border-radius: 50%; background: #8E8E93; animation-delay: 0.15s;"></span><span class="kdot" style="width: 10px; height: 10px; border-radius: 50%; background: #8E8E93; animation-delay: 0.3s;"></span></span></sc-if><sc-if value="{{m.hasText}}" hint-placeholder-val="{{ true }}"><span class="kfade">{{m.text}}</span></sc-if></div></div>
+<div style="align-self: flex-start; display: flex; align-items: flex-end; gap: 16px; max-width: 94%;"><span style="display: block; width: 40px; height: 40px; flex-shrink: 0; margin-bottom: -2px;"><x-import component-from-global-scope="Kipper.KipperLive" expr="{{m.kexpr}}" size="{{sz40}}"></x-import></span><div class="bub bkg ksm" style="max-width: 100%;"><sc-if value="{{m.typing}}" hint-placeholder-val="{{ false }}"><span style="display: flex; gap: 6px; padding: 6px 2px;" aria-label="Kipper is typing"><span class="kdot" style="width: 10px; height: 10px; border-radius: 50%; background: #8E8E93;"></span><span class="kdot" style="width: 10px; height: 10px; border-radius: 50%; background: #8E8E93; animation-delay: 0.15s;"></span><span class="kdot" style="width: 10px; height: 10px; border-radius: 50%; background: #8E8E93; animation-delay: 0.3s;"></span></span></sc-if><sc-if value="{{m.hasText}}" hint-placeholder-val="{{ true }}"><span class="kfade">{{m.text}}</span></sc-if></div></div>
 </sc-if>
 <sc-if value="{{m.sys}}" hint-placeholder-val="{{ false }}">
 <div class="kpop" style="align-self: center; margin: 4px 0 10px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
@@ -272,7 +279,7 @@ call grandma back sunday!!
 </div>
 </sc-if>
 <sc-if value="{{m.them}}" hint-placeholder-val="{{ false }}">
-<div class="kpop" style="align-self: flex-start; display: flex; align-items: flex-end; gap: 10px; max-width: 94%;">
+<div class="kpop" style="align-self: flex-start; display: flex; align-items: flex-end; gap: 16px; max-width: 94%;">
 <sc-if value="{{m.isKipper}}" hint-placeholder-val="{{ false }}"><span style="display: block; width: 40px; height: 40px; flex-shrink: 0;"><x-import component-from-global-scope="Kipper.Kipper" expr="glad" size="{{sz40}}"></x-import></span></sc-if>
 <sc-if value="{{m.hasAv}}" hint-placeholder-val="{{ true }}"><img src="{{m.av}}" alt="{{m.name}}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex-shrink: 0;"></sc-if>
 <div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
@@ -433,7 +440,7 @@ var IMG = {
   jazz: '/_img/03e791219e3e10cd219c9f061850952a.jpg', jazzbar: '/_img/38f95e90e82562771fd78088d1d4f6a5.jpg', speaker: '/_img/fba94721102be73bf992ff4731412f44.jpg',
   dinner: '/_img/5faebf3a117b67beec30c7d78f8af883.jpg', rooftop: '/_img/a1bdfd77e5981726f2e1ac185433b7aa.jpg',
   networking: '/_img/bfa76d28482eecc00173e5e6b54c6a3b.jpg', costumes: '/_img/9c798e152ec7ceec03553b9ba3dbf570.jpg',
-  iYou: '/_img/a3faaa945f06dc3b6d9c63bece4aa09b.jpg', iCal: '/_img/519e03dd6d3bb7558f6d42e9aa2c2618.svg', iExp: '/_img/73c3db7c467bcf1a1052b9c00bb66a38.svg'
+  iYou: '/_img/a3faaa945f06dc3b6d9c63bece4aa09b.jpg', iCal: '/_img/519e03dd6d3bb7558f6d42e9aa2c2618.svg', iExp: '/_img/kipper-experience-purple.svg'
 };
 var AV = {
   kelli: '/_img/09fba04d732b3e3812747d60bdd09a64.jpg', priya: '/_img/0bb659bc126937e2b6d0249da50fb86a.jpg',
@@ -901,6 +908,8 @@ class Component extends DCLogic {
       });
       return {
         idx: String(i), title: S.title, sub: S.sub, dir: i % 2 === 0 ? 'row' : 'row-reverse',
+        bgF: S.script.length >= 7 ? 0.08 : (S.script.length >= 5 ? 0.45 : 0.8),
+        bgTop: S.script.length >= 7 ? 210 : 0,
         collageH: S.group ? 380 : 520, collageHm: Math.round((S.group ? 380 : 520) * 0.55), chatMin: S.group ? 900 : 520,
         items: items, msgs: self.buildMsgs(S.script, e, on, S)
       };
