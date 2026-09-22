@@ -323,7 +323,7 @@ call grandma back sunday!!
 <div style="position: absolute; left: 50%; top: 50%; margin: 96px 0 0 -34px; font-family: 'Caveat', cursive; font-size: 32px; background: #FFFDF8; padding: 0 12px; border-radius: 6px;">Alex</div>
 </div>
 <div style="width: 390px; flex-shrink: 0; display: flex; flex-direction: column; gap: 20px;">
-<h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 64px; line-height: 1; letter-spacing: -1px;">Your people, in circles.</h2>
+<h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 64px; line-height: 1; letter-spacing: -1px;">Your people, when you want to see them</h2>
 <p style="margin: 0 0 10px; font-size: 20px; line-height: 1.5; color: #3A342C;">Tell Kipper who matters and how often. It quietly finds the time so nobody drifts.</p>
 <sc-for list="{{circles}}" as="c" hint-placeholder-count="3">
 <button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="width: 100%; text-align: left; background: {{c.rowBg}}; border: 1.5px solid {{c.rowBorder}}; border-radius: 22px; padding: 18px 22px; cursor: pointer; font-family: inherit; color: #1E1B16; display: flex; flex-direction: column; gap: 12px; transition: background .3s ease, border-color .3s ease;">
@@ -346,7 +346,6 @@ call grandma back sunday!!
 <div style="width: 200px; height: 200px; border-radius: 50%; background: #FFFDF8; box-shadow: 0 22px 44px rgba(30,27,22,0.12); display: flex; align-items: center; justify-content: center;">
 <sc-if value="{{st.photo}}" hint-placeholder-val="{{ false }}"><img src="{{st.icon}}" alt="Alex" style="width: 176px; height: 176px; border-radius: 50%; object-fit: cover;"></sc-if><sc-if value="{{st.kip}}" hint-placeholder-val="{{ false }}"><span style="display: block; width: 170px; height: 170px;"><x-import component-from-global-scope="Kipper.Kipper" expr="excited" size="{{sz170}}"></x-import></span></sc-if><sc-if value="{{st.plain}}" hint-placeholder-val="{{ true }}"><img src="{{st.icon}}" alt="" style="width: 140px; height: 140px;"></sc-if>
 </div>
-<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #7A7166; margin-top: 14px;">STEP {{st.n}}</div>
 <div style="font-family: 'Instrument Serif', serif; font-size: 50px; line-height: 1;">{{st.title}}</div>
 <div style="font-size: 20px; line-height: 1.55; color: #3A342C; max-width: 340px;">{{st.body}}</div>
 </div>
@@ -546,7 +545,7 @@ var KIP_SECTIONS = [
   },
   {
     kx: 'hopeful', kx2: 'excited',
-    title: 'Meet new folks that are going too.',
+    title: 'Meet folks that are going too.',
     sub: 'Plans fall through. Kipper finds people already going that you’d actually click with.',
     script: [
       { me: 'Ugh, Kelli just canceled on the Lunar New Year parade 😩 anyone else going who’s my kinda people?' },
