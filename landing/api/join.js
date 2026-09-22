@@ -1,10 +1,12 @@
 // POST /api/join  { phone: "4155550123", source?: "landing-desktop" }
-// Stores a US phone number on the Supabase waitlist. Service-role key stays
-// server-side; the waitlist table has RLS on with no policies, so this route
-// is the only way in.
+// Stores a US phone number on the Supabase waitlist.
+//
+// The waitlist table has RLS on with a single insert-only policy for anon, so
+// the publishable key can add a signup but can never read one back. A
+// service-role key is used instead when one is configured.
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
 
 // 10 digits, or 11 leading with the US country code.
 function toE164(input) {
@@ -22,7 +24,7 @@ module.exports = async (req, res) => {
   }
 
   if (!SUPABASE_URL || !SERVICE_KEY) {
-    console.error('join: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not set');
+    console.error('join: SUPABASE_URL or a Supabase key is not set');
     return res.status(500).json({ error: 'server_misconfigured' });
   }
 
