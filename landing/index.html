@@ -710,7 +710,7 @@ function clamp01(x) { return x < 0 ? 0 : x > 1 ? 1 : x; }
 class Component extends DCLogic {
   constructor(...args) {
     super(...args);
-    this.state = { pi: 0, n: 0, del: false, hold: 8, tickN: 0, email: '', phone: '', phoneErr: false, joined: false };
+    this.state = { pi: 0, n: 0, del: false, hold: 8, tickN: 0, email: '', phone: '', phoneErr: false, joined: false, joining: false, joinErr: false };
     this.sy = 0; this.vh = 900; this.maxV = 0; this.staticMode = false;
     this.vis = {}; this.started = {}; this.offsets = {};
     this.cam = { x: 0, y: 0, s: 1, fit: false };
@@ -739,9 +739,26 @@ class Component extends DCLogic {
     this.onPhone = (e) => {
       var d = String(e.target.value || '').replace(/\D/g, '');
       if (d.length > 10 && d.charAt(0) === '1') d = d.slice(1);
-      this.setState({ phone: d.slice(0, 10), phoneErr: false });
+      this.setState({ phone: d.slice(0, 10), phoneErr: false, joinErr: false });
     };
-    this.onJoin = () => { if ((this.state.phone || '').length === 10) this.setState({ joined: true }); else this.setState({ phoneErr: true }); };
+    this.onJoin = () => {
+      var d = this.state.phone || '';
+      if (d.length !== 10) { this.setState({ phoneErr: true, joinErr: false }); return; }
+      if (this.state.joining || this.state.joined) return;
+      var self = this;
+      this.setState({ joining: true, joinErr: false });
+      fetch('/api/join', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: d, source: 'landing-desktop' })
+      }).then(function (r) {
+        if (!r.ok) throw new Error('join failed: ' + r.status);
+        self.setState({ joined: true, joining: false });
+      }).catch(function (err) {
+        console.error(err);
+        self.setState({ joining: false, joinErr: true });
+      });
+    };
   }
 
   componentDidMount() {
@@ -975,8 +992,8 @@ class Component extends DCLogic {
       caret1: c < SPEND1.length, caret2: c >= SPEND1.length && c < total,
       camX: cam.x.toFixed(1), camY: cam.y.toFixed(1), camS: cam.s.toFixed(3), camCls: cam.fit ? 'fit' : '',
       phoneFmt: kipFmtPhone(st.phone || ''), onPhone: this.onPhone, onJoin: this.onJoin,
-      phoneNote: st.phoneErr ? 'oops, need all 10 digits' : 'US numbers only for now · never spam',
-      phoneNoteInk: st.phoneErr ? '#D9482F' : '#4A443B',
+      phoneNote: st.phoneErr ? 'oops, need all 10 digits' : (st.joinErr ? 'something went wrong, try again' : 'US numbers only for now · never spam'),
+      phoneNoteInk: (st.phoneErr || st.joinErr) ? '#D9482F' : '#4A443B',
       joined: st.joined, notJoined: !st.joined
     };
   }
