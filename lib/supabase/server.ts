@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./env";
+import { supabaseConfig } from "./env";
 
 /**
  * Supabase client for Server Components, Server Actions and Route Handlers.
@@ -10,9 +10,12 @@ import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./env";
  * user's session cookies can leak into another user's response.
  */
 export async function createClient() {
+  // Read cookies first: this marks the route dynamic, so a missing env var
+  // surfaces as a request-time error rather than a prerender failure at build.
   const cookieStore = await cookies();
+  const { url, publishableKey } = supabaseConfig();
 
-  return createServerClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  return createServerClient(url, publishableKey, {
     cookies: {
       getAll() {
         return cookieStore.getAll();

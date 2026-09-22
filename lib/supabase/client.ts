@@ -1,8 +1,9 @@
 import { createBrowserClient } from "@supabase/ssr";
 
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./env";
+import { supabaseConfig } from "./env";
 
 /** Supabase client for Client Components. */
 export function createClient() {
-  return createBrowserClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const { url, publishableKey } = supabaseConfig();
+  return createBrowserClient(url, publishableKey);
 }

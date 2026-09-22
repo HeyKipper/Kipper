@@ -1,10 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-import {
-  SUPABASE_PUBLISHABLE_KEY,
-  SUPABASE_URL,
-} from "@/lib/supabase/env";
+import { supabaseConfig } from "@/lib/supabase/env";
 
 /** Routes that require a signed-in user. */
 const PROTECTED_PREFIXES = ["/home", "/onboarding"];
@@ -18,9 +15,10 @@ const PROTECTED_PREFIXES = ["/home", "/onboarding"];
  * verifies the user itself.
  */
 export async function proxy(request: NextRequest) {
+  const { url, publishableKey } = supabaseConfig();
   let response = NextResponse.next({ request });
 
-  const supabase = createServerClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  const supabase = createServerClient(url, publishableKey, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
