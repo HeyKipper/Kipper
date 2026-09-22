@@ -8,6 +8,11 @@
 <title>Kipper — mobile</title>
 <script src="/support.js"></script>
 <script src="/ds/kipper/components/bundle.js"></script>
+<script>(function(){var d=document,r=d.documentElement;function isF(t){return t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA');}
+d.addEventListener('focusin',function(e){if(!isF(e.target))return;r.classList.add('kbopen');var t=e.target;setTimeout(function(){try{t.scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}} ,320);});
+d.addEventListener('focusout',function(e){if(isF(e.target))r.classList.remove('kbopen');});
+function ks(){r.style.setProperty('--kscale',Math.min(1,(window.innerWidth-22)/620).toFixed(4));}
+ks();window.addEventListener('resize',ks);window.addEventListener('orientationchange',ks);})();</script>
 </head>
 <body>
 <x-dc>
@@ -25,9 +30,10 @@ a{color:#1E1B16}a:hover{color:#D9482F}
 @keyframes kbob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
 .kbob{animation:kbob 2.4s ease-in-out infinite}
 html{scroll-snap-type:y mandatory}
+html.kbopen{scroll-snap-type:none}
 .knav{scroll-snap-align:start}
-#top.ksnap{min-height:calc(100vh - 68px)!important;scroll-snap-align:none}
-.ksnap{min-height:min(100vh,1600px)!important;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center!important;scroll-snap-align:start;scroll-snap-stop:always}
+#top.ksnap{min-height:calc(100vh - 68px)!important;min-height:calc(100svh - 68px)!important;scroll-snap-align:none}
+.ksnap{min-height:min(100vh,1600px)!important;min-height:min(100svh,1600px)!important;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center!important;scroll-snap-align:start;scroll-snap-stop:always}
 .kcaret{animation:kblink 1s steps(1) infinite}
 .kdot{animation:kdot 1.1s ease-in-out infinite}
 .kfloat{animation:kfloat 7s ease-in-out infinite}
@@ -58,10 +64,17 @@ details[open] .kplus{rotate:45deg}
 .kplus{transition:rotate .2s ease}
 input::placeholder{color:#8A8175}
 button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9482F;outline-offset:3px}
-</style>
-.bub{font-size:18px;padding:9px 15px 10px;border-radius:20px;max-width:86%}
-.bub.sm{font-size:17px;padding:8px 14px 9px}
+.bub{font-size:17px;padding:9px 15px 10px;border-radius:20px;max-width:86%}
+.bub.sm{font-size:16px;padding:8px 14px 9px}
 .bub::after{width:18px;height:18px}
+.kipsec{justify-content:flex-start!important;position:relative;overflow:hidden}
+.kipbg{position:relative;width:100%;flex:none;z-index:0;pointer-events:none;opacity:.8}
+.kipbg>div{position:absolute;left:50%;top:0;margin-left:-310px;width:620px;transform-origin:50% 0;transform:scale(var(--kscale,.55))}
+.kipfg{position:relative;z-index:2}
+.kstep:nth-child(even){flex-direction:row-reverse!important;text-align:right}
+#faq.ksnap{min-height:auto!important;scroll-snap-stop:normal;scroll-snap-align:none}
+@media (max-height:720px){.ksnap{scroll-snap-stop:normal}.kipsec h2{font-size:27px}}
+</style>
 </helmet>
 <div ref="{{rootRef}}" style="width: 100%; max-width: 520px; margin: 0 auto; overflow-x: clip; background-color: #F4EEE3; background-image: radial-gradient(#DCD1BE 1px, transparent 1.3px); background-size: 22px 22px; position: relative;">
 
@@ -113,10 +126,10 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 </div>
 
 <sc-for list="{{sections}}" as="s" hint-placeholder-count="8">
-<div class="kipsec ksnap" data-kidx="{{s.idx}}" style="padding: 36px 18px; display: flex; flex-direction: column; gap: 14px;">
-<h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 38px; line-height: 1.02; letter-spacing: -0.6px; text-align: center;">{{s.title}}</h2>
-<div style="position: relative; width: 341px; height: {{s.collageHm}}px; margin: 20px auto 10px;">
-<div style="position: absolute; left: 0; top: 0; width: 620px; height: {{s.collageH}}px; transform: scale(0.55); transform-origin: 0 0;">
+<div class="kipsec ksnap" data-kidx="{{s.idx}}" style="padding: 16px 14px 20px; display: flex; flex-direction: column; gap: 8px;">
+<h2 class="kipfg" style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 31px; line-height: 1.05; letter-spacing: -0.5px; text-align: center;">{{s.title}}</h2>
+<div class="kipbg" aria-hidden="true" style="height: calc({{s.collageH}}px * var(--kscale) * 0.8);">
+<div style="height: {{s.collageH}}px;">
 <sc-for list="{{s.items}}" as="it" hint-placeholder-count="3">
 <div class="scrap" style="position: absolute; left: {{it.x}}px; top: {{it.y}}px; width: {{it.w}}px; transform: translateY({{it.dy}}px) rotate({{it.r}}deg); opacity: {{it.op}}; transition-delay: {{it.delay}}ms;">
 
@@ -201,7 +214,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 </sc-for>
 </div>
 </div>
-<div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+<div class="kipfg" style="display: flex; flex-direction: column; gap: 9px; margin-top: 4px;">
 <sc-for list="{{s.msgs}}" as="m" hint-placeholder-count="2">
 <sc-if value="{{m.me}}" hint-placeholder-val="{{ true }}">
 <div style="align-self: flex-end; display: flex; align-items: flex-end; gap: 12px; max-width: 92%; margin-top: {{m.mt}}px;"><div class="bub bme {{m.sz}}" style="max-width: 100%;">{{m.text}}<sc-if value="{{m.caret}}" hint-placeholder-val="{{ false }}"><span class="kcaret" style="display: inline-block; width: 2px; height: 24px; margin-left: 2px; vertical-align: -4px; background: #FFFFFF;"></span></sc-if><sc-if value="{{m.hasReacts}}" hint-placeholder-val="{{ false }}"><div class="ktap"><sc-for list="{{m.reacts}}" as="rx" hint-placeholder-count="2"><span>{{rx}}</span></sc-for></div></sc-if></div><img src="/_img/a3faaa945f06dc3b6d9c63bece4aa09b.jpg" alt="Alex" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex-shrink: 0;"></div>
@@ -247,9 +260,8 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 </div>
 </sc-for>
 
-<div class="ksnap" data-kidx="rings" style="padding: 36px 18px; display: flex; flex-direction: column; gap: 18px;">
-<h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 40px; line-height: 1;">Your people, in circles.</h2>
-<p style="margin: 0; font-size: 17px; line-height: 1.5; color: #3A342C;">Tell Kipper who matters and how often. It quietly finds the time so nobody drifts.</p>
+<div class="ksnap" data-kidx="rings" style="padding: 24px 16px; display: flex; flex-direction: column; gap: 12px;">
+<h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1;">Your people, in circles.</h2>
 <div style="position: relative; width: 354px; height: 354px; margin: 10px auto;">
 <div style="position: absolute; left: 0; top: 0; width: 860px; height: 860px; transform: scale(0.41); transform-origin: 0 0;">
 <sc-for list="{{circlesRev}}" as="c" hint-placeholder-count="3">
@@ -267,25 +279,27 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 </div>
 </div>
 <sc-for list="{{circles}}" as="c" hint-placeholder-count="3">
-<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="width: 100%; text-align: left; background: {{c.rowBg}}; border: 1.5px solid {{c.rowBorder}}; border-radius: 22px; padding: 14px 16px; cursor: pointer; font-family: inherit; color: #1E1B16; display: flex; flex-direction: column; gap: 12px; transition: background .3s ease, border-color .3s ease;">
-<span style="display: flex; align-items: center; gap: 12px; width: 100%;"><span style="width: 14px; height: 14px; border-radius: 50%; background: {{c.color}}; flex-shrink: 0;"></span><span style="font-family: 'Instrument Serif', serif; font-size: 26px; line-height: 1;">{{c.name}}</span><span style="margin-left: auto; font-family: 'Caveat', cursive; font-size: 24px; color: #4A443B;">{{c.count}}</span></span>
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="width: 100%; text-align: left; background: {{c.rowBg}}; border: 1.5px solid {{c.rowBorder}}; border-radius: 20px; padding: 11px 14px; cursor: pointer; font-family: inherit; color: #1E1B16; display: flex; flex-direction: column; gap: 9px; transition: background .3s ease, border-color .3s ease;">
+<span style="display: flex; align-items: center; gap: 12px; width: 100%;"><span style="width: 14px; height: 14px; border-radius: 50%; background: {{c.color}}; flex-shrink: 0;"></span><span style="font-family: 'Instrument Serif', serif; font-size: 22px; line-height: 1;">{{c.name}}</span><span style="margin-left: auto; font-family: 'Caveat', cursive; font-size: 24px; color: #4A443B;">{{c.count}}</span></span>
 <span style="display: block; width: 100%; height: 6px; border-radius: 3px; background: #E8DFCF; overflow: hidden;"><span style="display: block; height: 6px; width: {{c.prog}}%; background: {{c.color}}; border-radius: 3px; transition: {{c.barTr}};"></span></span>
 <sc-if value="{{c.isActive}}" hint-placeholder-val="{{ false }}"><span style="display: flex; flex-direction: column; gap: 6px;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #4A443B;">{{c.freq}}</span><span style="font-size: 16px; line-height: 1.5; color: #3A342C;">{{c.body}}</span></span></sc-if>
 </button>
 </sc-for>
 </div>
 
-<div id="how" class="ksnap" style="padding: 40px 18px;">
-<h2 style="margin: 0 0 40px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 48px; line-height: 1;">How Kipper works</h2>
-<div style="display: flex; flex-direction: column; gap: 44px; text-align: center;">
+<div id="how" class="ksnap" style="padding: 26px 16px;">
+<h2 style="margin: 0 0 22px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1;">How Kipper works</h2>
+<div style="display: flex; flex-direction: column; gap: 18px;">
 <sc-for list="{{steps}}" as="st" hint-placeholder-count="3">
-<div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
-<div style="width: 150px; height: 150px; border-radius: 50%; background: #FFFDF8; box-shadow: 0 16px 34px rgba(30,27,22,0.12); display: flex; align-items: center; justify-content: center;">
-<sc-if value="{{st.photo}}" hint-placeholder-val="{{ false }}"><img src="{{st.icon}}" alt="Alex" style="width: 132px; height: 132px; border-radius: 50%; object-fit: cover;"></sc-if><sc-if value="{{st.kip}}" hint-placeholder-val="{{ false }}"><span style="display: block; width: 120px; height: 120px;"><x-import component-from-global-scope="Kipper.Kipper" expr="excited" size="{{sz120}}"></x-import></span></sc-if><sc-if value="{{st.plain}}" hint-placeholder-val="{{ true }}"><img src="{{st.icon}}" alt="" style="width: 104px; height: 104px;"></sc-if>
+<div class="kstep" style="display: flex; flex-direction: row; align-items: center; gap: 14px; text-align: left;">
+<div style="width: 104px; height: 104px; flex-shrink: 0; border-radius: 50%; background: #FFFDF8; box-shadow: 0 12px 24px rgba(30,27,22,0.12); display: flex; align-items: center; justify-content: center;">
+<sc-if value="{{st.photo}}" hint-placeholder-val="{{ false }}"><img src="{{st.icon}}" alt="Alex" style="width: 92px; height: 92px; border-radius: 50%; object-fit: cover;"></sc-if><sc-if value="{{st.kip}}" hint-placeholder-val="{{ false }}"><span style="display: block; width: 120px; height: 120px; transform: scale(0.7);"><x-import component-from-global-scope="Kipper.Kipper" expr="excited" size="{{sz120}}"></x-import></span></sc-if><sc-if value="{{st.plain}}" hint-placeholder-val="{{ true }}"><img src="{{st.icon}}" alt="" style="width: 72px; height: 72px;"></sc-if>
 </div>
-<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #7A7166; margin-top: 8px;">STEP {{st.n}}</div>
-<div style="font-family: 'Instrument Serif', serif; font-size: 38px; line-height: 1;">{{st.title}}</div>
-<div style="font-size: 17px; line-height: 1.55; color: #3A342C; max-width: 320px;">{{st.body}}</div>
+<div style="display: flex; flex-direction: column; gap: 3px; min-width: 0;">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; color: #7A7166;">STEP {{st.n}}</div>
+<div style="font-family: 'Instrument Serif', serif; font-size: 27px; line-height: 1.02;">{{st.title}}</div>
+<div style="font-size: 15px; line-height: 1.45; color: #3A342C;">{{st.body}}</div>
+</div>
 </div>
 </sc-for>
 </div>
@@ -297,18 +311,18 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 </h2>
 </div>
 
-<div id="pricing" class="ksnap" style="padding: 36px 0;">
-<h2 style="margin: 0 0 26px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 48px; line-height: 1;">Pricing</h2>
-<div style="display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 18px 40px 26px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+<div id="pricing" class="ksnap" style="padding: 18px 0;">
+<h2 style="margin: 0 0 14px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1;">Pricing</h2>
+<div style="display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 14px 34px 18px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
 <sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
-<div style="position: relative; flex: 0 0 300px; scroll-snap-align: center; background: #FFFDF8; box-shadow: 0 16px 34px rgba(30,27,22,0.12), 0 1px 2px rgba(30,27,22,0.08); padding: 30px 18px 20px; box-sizing: border-box; transform: rotate({{p.rot}}deg);">
+<div style="position: relative; flex: 0 0 286px; scroll-snap-align: center; background: #FFFDF8; box-shadow: 0 16px 34px rgba(30,27,22,0.12), 0 1px 2px rgba(30,27,22,0.08); padding: 22px 16px 16px; box-sizing: border-box; transform: rotate({{p.rot}}deg);">
 <div style="position: absolute; top: -13px; left: 26px; right: 26px; display: flex; justify-content: space-between;">
 <sc-for list="{{p.rings}}" as="rg" hint-placeholder-count="8"><div style="width: 11px; height: 26px; border-radius: 6px; background: linear-gradient(90deg, #8B8F95, #D7DADF 50%, #8B8F95); box-shadow: 0 2px 3px rgba(0,0,0,0.2);"></div></sc-for>
 </div>
 <div style="display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 16px; border-bottom: 2px solid #1E1B16;">
 <div>
 <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #4A443B;">{{p.name}}</div>
-<div style="display: flex; align-items: baseline; gap: 6px; margin-top: 6px;"><span style="font-family: 'Instrument Serif', serif; font-size: 76px; line-height: 0.9; letter-spacing: -1.5px;">{{p.price}}</span><span style="font-size: 16px; color: #4A443B;">{{p.per}}</span></div>
+<div style="display: flex; align-items: baseline; gap: 6px; margin-top: 6px;"><span style="font-family: 'Instrument Serif', serif; font-size: 56px; line-height: 0.9; letter-spacing: -1.5px;">{{p.price}}</span><span style="font-size: 16px; color: #4A443B;">{{p.per}}</span></div>
 </div>
 </div>
 <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; color: #7A7166; text-align: center;">
@@ -322,7 +336,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 </div>
 </sc-for>
 </div>
-<div style="display: flex; flex-direction: column; gap: 11px; margin-top: 24px;">
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
 <sc-for list="{{p.feats}}" as="f" hint-placeholder-count="3">
 <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.4; color: #2A251F;">
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#F1EADC"></circle><path d="M6 10.4 8.6 13 14 7.4" stroke="#1E1B16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
@@ -338,9 +352,9 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #D9
 <div style="text-align: center; font-family: 'Caveat', cursive; font-size: 22px; color: #4A443B;">swipe to compare</div>
 </div>
 
-<div id="faq" class="ksnap" style="padding: 40px 0;">
+<div id="faq" class="ksnap" style="padding: 26px 0;">
 <div style="padding: 0 18px;">
-<h2 style="margin: 0 0 40px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 44px; line-height: 1; letter-spacing: -1px; text-align: center;">Questions, answered</h2>
+<h2 style="margin: 0 0 22px; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1; letter-spacing: -1px; text-align: center;">Questions, answered</h2>
 <div style="background: #FFFDF8; border: 1px solid #E6DCCA; border-radius: 32px; padding: 4px 20px;">
 <sc-for list="{{faqs}}" as="q" hint-placeholder-count="8">
 <details style="border-bottom: 1px solid #ECE3D3; padding: 22px 0;">
