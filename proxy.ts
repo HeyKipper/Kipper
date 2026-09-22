@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-import { supabaseConfig } from "@/lib/supabase/env";
+import { missingSupabaseConfig, supabaseConfig } from "@/lib/supabase/env";
 
 /** Routes that require a signed-in user. */
 const PROTECTED_PREFIXES = ["/home", "/onboarding"];
@@ -15,6 +15,19 @@ const PROTECTED_PREFIXES = ["/home", "/onboarding"];
  * verifies the user itself.
  */
 export async function proxy(request: NextRequest) {
+  // Without config there is no session to refresh. Pass the request through
+  // rather than throwing: this runs on every route, so throwing here would
+  // take down the marketing page too. Routes that actually need Supabase
+  // still fail loudly, because they create their own client.
+  const missing = missingSupabaseConfig();
+  if (missing.length > 0) {
+    console.error(
+      `[proxy] Skipping session refresh, missing ${missing.join(" and ")}. ` +
+        `See /api/health.`,
+    );
+    return NextResponse.next({ request });
+  }
+
   const { url, publishableKey } = supabaseConfig();
   let response = NextResponse.next({ request });
 
