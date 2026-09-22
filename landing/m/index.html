@@ -356,6 +356,12 @@ call grandma back sunday!!
 <div id="pricing" class="ksnap" style="padding: 18px 0;">
 <h2 style="margin: 0 0 14px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1;">Pricing</h2>
 <div id="kdeck" style="position: relative; height: 664px; margin: 4px 0 0; touch-action: pan-y;">
+<button type="button" onClick="{{planPrev}}" aria-label="Previous plan" style="position: absolute; left: 2px; top: 50%; margin-top: -22px; z-index: 20; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid #E6DCCA; background: #FFFDF8; box-shadow: 0 6px 16px rgba(30,27,22,0.18); cursor: pointer; opacity: {{planPrevOp}}; display: flex; align-items: center; justify-content: center; transition: opacity .25s ease;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E1B16" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<button type="button" onClick="{{planNext}}" aria-label="Next plan" style="position: absolute; right: 2px; top: 50%; margin-top: -22px; z-index: 20; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid #E6DCCA; background: #FFFDF8; box-shadow: 0 6px 16px rgba(30,27,22,0.18); cursor: pointer; opacity: {{planNextOp}}; display: flex; align-items: center; justify-content: center; transition: opacity .25s ease;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E1B16" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+</button>
 <sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
 <div class="kcard" role="button" tabindex="0" aria-label="{{p.name}} plan" onClick="{{p.pick}}" style="position: absolute; left: 50%; top: 0; width: 278px; margin-left: -139px; background: #FFFDF8; box-shadow: 0 16px 34px rgba(30,27,22,0.12), 0 1px 2px rgba(30,27,22,0.08); padding: 16px 15px 12px; box-sizing: border-box; cursor: pointer; z-index: {{p.z}}; opacity: {{p.op}}; transform: translate({{p.tx}}px, {{p.ty}}px) scale({{p.sc}}) rotate({{p.rot}}deg);">
 <div style="position: absolute; top: -13px; left: 26px; right: 26px; display: flex; justify-content: space-between;">
@@ -893,6 +899,7 @@ class Component extends DCLogic {
 
   renderVals() {
     var st = this.state, self = this, now = Date.now();
+    var planA = self.planA || 0, planLast = KIP_PLANS.length - 1;
     var sy = this.sy, V = this.vh;
 
     var sections = KIP_SECTIONS.map(function (S, i) {
@@ -987,7 +994,7 @@ class Component extends DCLogic {
       stageH: Math.round(V), spendStageTop: Math.round(sp.top),
       circles: circles, circlesRev: circles.slice().reverse(),
       steps: KIP_STEPS.map(function (x) { return Object.assign({ photo: false, kip: false }, x, { plain: !x.photo && !x.kip }); }), plans: (function () {
-        var pa = self.planA || 0;
+        var pa = planA;
         window.__kipPlanA = pa;
         window.__kipPlan = function (i) { self.planA = i < 0 ? 0 : (i > KIP_PLANS.length - 1 ? KIP_PLANS.length - 1 : i); self.forceUpdate(); };
         return KIP_PLANS.map(function (pl, i) {
@@ -995,13 +1002,17 @@ class Component extends DCLogic {
           return Object.assign({}, pl, {
             countSize: pl.count === '∞' ? 72 : 42,
             isActive: d === 0, z: 10 - ad,
-            tx: 0, ty: ad * -11, sc: (1 - ad * 0.05).toFixed(3),
-            op: d === 0 ? 1 : 0.38,
+            tx: d * 34, ty: ad * -6, sc: (1 - ad * 0.055).toFixed(3),
+            op: d === 0 ? 1 : 0.62,
             dotW: d === 0 ? 22 : 8, dotBg: d === 0 ? '#7466AA' : '#D8CDB9',
             pick: function () { self.planA = i; self.forceUpdate(); }
           });
         });
-      })(), faqs: KIP_FAQS,
+      })(),
+      planPrev: function () { if (planA > 0) { self.planA = planA - 1; self.forceUpdate(); } },
+      planNext: function () { if (planA < planLast) { self.planA = planA + 1; self.forceUpdate(); } },
+      planPrevOp: planA > 0 ? 1 : 0.25, planNextOp: planA < planLast ? 1 : 0.25,
+      faqs: KIP_FAQS,
       parBg: Math.round((0.5 - sp.p) * 260), parFg: Math.round((0.5 - sp.p) * 90),
       spend1: SPEND1.slice(0, c1), spend2: SPEND2.slice(0, c2),
       caret1: c < SPEND1.length, caret2: c >= SPEND1.length && c < total,
