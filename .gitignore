@@ -42,3 +42,9 @@ next-env.d.ts
 
 # keep the example committed
 !.env.example
+
+# landing export copied into public/ by scripts/sync-landing.mjs
+/public/landing/
+/public/_img/
+/public/ds/
+/public/support.js

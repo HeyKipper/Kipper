@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/sync-landing.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/sync-landing.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:landing": "node scripts/sync-landing.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

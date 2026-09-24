@@ -10,13 +10,30 @@ you're in. No passwords, no email required at signup.
 Email and Google/Microsoft OAuth come later, when a user connects a calendar.
 Both are optional and neither is part of getting in.
 
+## The front door
+
+The landing page **is** the app's home page. `landing/` is the export from the
+design canvas and stays the single source of truth; `scripts/sync-landing.mjs`
+copies it into `public/` before `dev` and `build`, and `next.config.ts` rewrites
+`/` and `/m` to it. The copies under `public/` are gitignored build output.
+
+**Re-exporting is unchanged:** replace `landing/`, and the next build picks it
+up. The only hand-edit that must survive a re-export is `onJoin` in
+`index.html` and `m/index.html` — see "After a re-export" below.
+
 ## How a login works
 
-1. `/login` collects a phone number and normalizes it to E.164 (`lib/phone.ts`).
-2. The `requestCode` Server Action calls `signInWithOtp({ phone })`. Supabase
-   asks Twilio Verify to send the code. **We never see or store the code.**
-3. The user types the code. `verifyCode` calls `verifyOtp()`, which sets the
-   session cookies.
+1. The landing page's hero takes a US phone number. `onJoin` POSTs it to
+   `/api/auth/start`.
+2. That route normalizes to E.164 (`lib/phone.ts`) and calls
+   `signInWithOtp({ phone })`. Supabase asks Twilio Verify to send the code.
+   **We never see or store the code.** It stores the number in a short-lived
+   httpOnly cookie and the page redirects to `/verify`.
+3. `/verify` reads that cookie and collects the code. `verifyCode` calls
+   `verifyOtp()`, which sets the session cookies, then redirects to `/home`.
+
+`/login` is a standalone version of the same two steps, useful for linking a
+returning user straight to sign-in without the landing page.
 4. A Postgres trigger (`handle_new_user`) creates the matching
    `public.profiles` row the first time a number signs in. Signup and login
    are therefore the same flow — there is no separate "register" step.
@@ -73,6 +90,28 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 
 Copy `.env.example` to `.env.local` for local dev, and set the same two in
 Vercel for deploys.
+
+## After a re-export
+
+The design canvas doesn't know about auth, so a fresh export ships the original
+`onJoin`, which POSTs to `/api/join` and shows a success state. Re-apply the
+edit in both `landing/index.html` and `landing/m/index.html`: POST to
+`/api/auth/start` instead, and on success `window.location.href = '/verify'`.
+Search for `onJoin` in each file; it is about ten lines.
+
+The `waitlist` table and `landing/api/join.js` are left from the pre-auth
+signup. Nothing writes to the table now.
+
+## Known issue: the hero can swallow a click
+
+Clicking the phone field scrolls the page (the field sits low in the viewport,
+and CSS scroll-snap animates it into view). A click on **Join** that lands
+while that scroll is still settling registers mousedown and mouseup on
+different elements, so it does nothing and the visitor has to click again.
+
+Measured at 1440x900: the button is stable when idle, but focusing the field
+moves the page 394px. This predates auth — it affected the waitlist button too.
+The fix belongs in the design canvas, since `landing/` is generated.
 
 ## Recovering a locked-out user
 
