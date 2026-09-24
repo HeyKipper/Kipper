@@ -375,7 +375,6 @@ call grandma back sunday!!
 <div>
 <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #4A443B;">{{p.name}}</div>
 <div style="display: flex; align-items: baseline; gap: 6px; margin-top: 6px;"><span style="font-family: 'Instrument Serif', serif; font-size: 76px; line-height: 0.9; letter-spacing: -1.5px;">{{p.price}}</span><span style="font-size: 16px; color: #4A443B;">{{p.per}}</span></div>
-<sc-if value="{{p.hasSub}}" hint-placeholder-val="{{ true }}"><div style="margin-top: 4px; font-size: 17px; font-weight: 600; color: #1E1B16;">{{p.sub}}</div></sc-if>
 </div>
 </div>
 <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; color: #7A7166; text-align: center;">
@@ -393,7 +392,7 @@ call grandma back sunday!!
 <sc-for list="{{p.feats}}" as="f" hint-placeholder-count="3">
 <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.4; color: #2A251F;">
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#F1EADC"></circle><path d="M6 10.4 8.6 13 14 7.4" stroke="#1E1B16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-<span>{{f}}</span>
+<span style="font-weight: {{f.fw}};">{{f.t}}</span>
 </div>
 </sc-for>
 </div>
@@ -648,12 +647,12 @@ var KIP_PLANS = [
   { name: 'FREE', price: '$0', per: 'forever', count: '8', rot: -1, cta: 'Start free', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 3: 2, 9: 1, 16: 2, 22: 1, 29: 2 }),
     feats: ['Unlimited suggestions', 'Friends, family & networking', 'Plan with your partner (free)'] },
-  { name: 'LITE', price: '~$1', per: '/ day', sub: '$29 billed monthly', count: '20', rot: 0.5, cta: 'Get Lite', btnBg: '#1E1B16', btnInk: '#FFFDF8', rings: RINGS8,
+  { name: 'LITE', price: '~$1', per: '/ day', count: '20', rot: 0.5, cta: 'Go Lite', btnBg: '#1E1B16', btnInk: '#FFFDF8', rings: RINGS8,
     days: kipMonth({ 1: 2, 6: 3, 10: 2, 14: 2, 19: 3, 22: 2, 27: 2, 30: 2, 31: 2 }),
-    feats: ['Everything in Free', 'Group plans & invites', 'Kipper learns faster'] },
-  { name: 'PRO', price: '~$2', per: '/ day', sub: '$59 billed monthly', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
+    feats: ['Everything in Free', 'Group plans & invites', 'Kipper learns faster', '$29/month'] },
+  { name: 'PRO', price: '~$2', per: '/ day', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 1: 2, 3: 1, 6: 2, 7: 1, 9: 2, 12: 1, 13: 2, 15: 1, 17: 2, 20: 1, 21: 2, 23: 2, 26: 1, 27: 2, 29: 1, 30: 2 }),
-    feats: ['Everything in Lite', 'Built for networkers & sellers', 'First dibs on new features'] }
+    feats: ['Everything in Lite', 'Built for networkers & sellers', 'First dibs on new features', '$59/month'] }
 ];
 
 var KIP_FAQS = [
@@ -991,7 +990,7 @@ class Component extends DCLogic {
       groupAvs: [AV.theo, AV.jordan, AV.priya, AV.sam, IMG.alex],
       stageH: Math.round(V), spendStageTop: Math.round(sp.top),
       circles: circles, circlesRev: circles.slice().reverse(),
-      steps: KIP_STEPS.map(function (x) { return Object.assign({ photo: false, kip: false }, x, { plain: !x.photo && !x.kip }); }), plans: KIP_PLANS.map(function (pl) { return Object.assign({}, pl, { countSize: pl.count === '∞' ? 118 : 64, hasSub: !!pl.sub }); }), faqs: KIP_FAQS,
+      steps: KIP_STEPS.map(function (x) { return Object.assign({ photo: false, kip: false }, x, { plain: !x.photo && !x.kip }); }), plans: KIP_PLANS.map(function (pl) { return Object.assign({}, pl, { countSize: pl.count === '∞' ? 118 : 64, feats: pl.feats.map(function (t) { return { t: t, fw: t.charAt(0) === '$' ? 600 : 400 }; }) }); }), faqs: KIP_FAQS,
       parBg: Math.round((0.5 - sp.p) * 260), parFg: Math.round((0.5 - sp.p) * 90),
       spend1: SPEND1.slice(0, c1), spend2: SPEND2.slice(0, c2),
       caret1: c < SPEND1.length, caret2: c >= SPEND1.length && c < total,
