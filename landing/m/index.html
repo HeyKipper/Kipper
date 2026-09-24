@@ -748,13 +748,16 @@ class Component extends DCLogic {
       if (this.state.joining || this.state.joined) return;
       var self = this;
       this.setState({ joining: true, joinErr: false });
-      fetch('/api/join', {
+      // Texts a one-time code, then hands off to /verify to collect it.
+      // The number is carried in an httpOnly cookie set by the endpoint.
+      fetch('/api/auth/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: d, source: 'landing-mobile' })
       }).then(function (r) {
-        if (!r.ok) throw new Error('join failed: ' + r.status);
-        self.setState({ joined: true, joining: false });
+        if (!r.ok) throw new Error('start failed: ' + r.status);
+        self.setState({ joined: true });
+        window.location.href = '/verify';
       }).catch(function (err) {
         console.error(err);
         self.setState({ joining: false, joinErr: true });
