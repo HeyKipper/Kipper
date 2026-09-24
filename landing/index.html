@@ -392,7 +392,7 @@ call grandma back sunday!!
 <sc-for list="{{p.feats}}" as="f" hint-placeholder-count="3">
 <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.4; color: #2A251F;">
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#F1EADC"></circle><path d="M6 10.4 8.6 13 14 7.4" stroke="#1E1B16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-<span style="font-weight: {{f.fw}};">{{f.t}}</span>
+<span>{{f}}</span>
 </div>
 </sc-for>
 </div>
@@ -990,7 +990,7 @@ class Component extends DCLogic {
       groupAvs: [AV.theo, AV.jordan, AV.priya, AV.sam, IMG.alex],
       stageH: Math.round(V), spendStageTop: Math.round(sp.top),
       circles: circles, circlesRev: circles.slice().reverse(),
-      steps: KIP_STEPS.map(function (x) { return Object.assign({ photo: false, kip: false }, x, { plain: !x.photo && !x.kip }); }), plans: KIP_PLANS.map(function (pl) { return Object.assign({}, pl, { countSize: pl.count === '∞' ? 118 : 64, feats: pl.feats.map(function (t) { return { t: t, fw: t.charAt(0) === '$' ? 600 : 400 }; }) }); }), faqs: KIP_FAQS,
+      steps: KIP_STEPS.map(function (x) { return Object.assign({ photo: false, kip: false }, x, { plain: !x.photo && !x.kip }); }), plans: KIP_PLANS.map(function (pl) { return Object.assign({}, pl, { countSize: pl.count === '∞' ? 118 : 64 }); }), faqs: KIP_FAQS,
       parBg: Math.round((0.5 - sp.p) * 260), parFg: Math.round((0.5 - sp.p) * 90),
       spend1: SPEND1.slice(0, c1), spend2: SPEND2.slice(0, c2),
       caret1: c < SPEND1.length, caret2: c >= SPEND1.length && c < total,

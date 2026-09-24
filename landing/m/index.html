@@ -385,11 +385,11 @@ call grandma back sunday!!
 <sc-for list="{{p.feats}}" as="f" hint-placeholder-count="3">
 <div style="display: flex; gap: 12px; align-items: flex-start; font-size: 17px; line-height: 1.4; color: #2A251F;">
 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink: 0; margin-top: 1px;" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="#F1EADC"></circle><path d="M6 10.4 8.6 13 14 7.4" stroke="#1E1B16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-<span style="font-weight: {{f.fw}};">{{f.t}}</span>
+<span>{{f}}</span>
 </div>
 </sc-for>
 </div>
-<div style="margin-top: auto; padding: 14px 0 4px; border-top: 2px dashed #D8CDB9; display: flex; flex-direction: column; align-items: center; gap: 2px;"><span style="font-family: 'Instrument Serif', serif; font-size: {{p.countSize}}px; line-height: 1.05; letter-spacing: -1px; -webkit-text-stroke: {{p.countStroke}}; paint-order: stroke fill;">{{p.count}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #4A443B;">EVENTS / MONTH</span></div>
+<div style="margin-top: auto; padding: 14px 0 4px; border-top: 2px dashed #D8CDB9; display: flex; flex-direction: column; align-items: center; gap: 2px;"><span style="font-family: 'Instrument Serif', serif; font-size: {{p.countSize}}px; line-height: 1.05; letter-spacing: -1px;">{{p.count}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #4A443B;">EVENTS / MONTH</span></div>
 <a href="#top" onClick="{{goTop}}" style="margin-top: 16px; height: 56px; border-radius: 999px; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: 600; font-size: 16px; background: #7466AA; color: #FFFFFF; border: 1.5px solid #7466AA;">{{p.cta}}</a>
 </div>
 </sc-for>
@@ -998,8 +998,6 @@ class Component extends DCLogic {
           var d = i - pa, ad = Math.abs(d);
           return Object.assign({}, pl, {
             countSize: pl.count === '∞' ? 72 : 42,
-            countStroke: pl.count === '∞' ? '2.5px' : '0',
-            feats: pl.feats.map(function (t) { return { t: t, fw: t.charAt(0) === '$' ? 600 : 400 }; }),
             isActive: d === 0, z: 10 - ad,
             tx: d * 34, ty: ad * -6, sc: (1 - ad * 0.055).toFixed(3),
             op: d === 0 ? 1 : 0.62,
