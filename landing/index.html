@@ -365,7 +365,7 @@ call grandma back sunday!!
 <div style="text-align: center; margin-bottom: 48px;">
 <h2 style="margin: 0; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 72px; line-height: 1; letter-spacing: -1.2px;">Pricing</h2>
 </div>
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; align-items: start;">
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; align-items: start;">
 <sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
 <div style="position: relative; background: #FFFDF8; box-shadow: 0 22px 48px rgba(30,27,22,0.12), 0 1px 2px rgba(30,27,22,0.08); padding: 32px 26px 22px; box-sizing: border-box; transform: rotate({{p.rot}}deg);">
 <div style="position: absolute; top: -13px; left: 26px; right: 26px; display: flex; justify-content: space-between;">
@@ -652,7 +652,10 @@ var KIP_PLANS = [
     feats: ['Everything in Free', 'Group plans & invites', 'Kipper learns faster', '$29/month'] },
   { name: 'PRO', price: '~$2', per: '/ day', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 1: 2, 3: 1, 6: 2, 7: 1, 9: 2, 12: 1, 13: 2, 15: 1, 17: 2, 20: 1, 21: 2, 23: 2, 26: 1, 27: 2, 29: 1, 30: 2 }),
-    feats: ['Everything in Lite', 'Built for networkers', 'First dibs on new features', '$59/month'] }
+    feats: ['Everything in Lite', 'Built for networkers', 'First dibs on new features', '$59/month'] },
+  { name: 'TEAM', price: 'custom', per: '', count: '∞', rot: -0.8, cta: 'Schedule a meeting', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
+    days: kipMonth({ 2: 3, 5: 2, 8: 3, 12: 2, 15: 3, 17: 2, 20: 3, 22: 2, 26: 3, 29: 2 }),
+    feats: ['Team analytics', 'Prospect event intuition', 'Auto-host prospect events'] }
 ];
 
 var KIP_FAQS = [

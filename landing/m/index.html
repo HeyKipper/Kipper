@@ -353,8 +353,9 @@ call grandma back sunday!!
 </h2>
 </div>
 
-<div id="pricing" class="ksnap" style="padding: 18px 0;">
-<h2 style="margin: 0 0 14px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1;">Pricing</h2>
+<div id="pricing" class="ksnap" style="padding: 26px 0 18px;">
+<h2 style="margin: 0 0 12px; text-align: center; font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 34px; line-height: 1;">Pricing</h2>
+<div style="margin: 0 0 16px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 3px; color: #7466AA; opacity: 0.8;">{{planName}}</div>
 <div id="kdeck" style="position: relative; height: 688px; margin: 4px 0 0; touch-action: pan-y;">
 <button type="button" onClick="{{planPrev}}" aria-label="Previous plan" style="position: absolute; left: 2px; top: 50%; margin-top: -22px; z-index: 20; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid #E6DCCA; background: #FFFDF8; box-shadow: 0 6px 16px rgba(30,27,22,0.18); cursor: pointer; opacity: {{planPrevOp}}; display: flex; align-items: center; justify-content: center; transition: opacity .25s ease;">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E1B16" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
@@ -649,7 +650,10 @@ var KIP_PLANS = [
     feats: ['Everything in Free', 'Group plans & invites', 'Kipper learns faster', '$29/month'] },
   { name: 'PRO', price: '~$2', per: '/ day', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 1: 2, 3: 1, 6: 2, 7: 1, 9: 2, 12: 1, 13: 2, 15: 1, 17: 2, 20: 1, 21: 2, 23: 2, 26: 1, 27: 2, 29: 1, 30: 2 }),
-    feats: ['Everything in Lite', 'Built for networkers', 'First dibs on new features', '$59/month'] }
+    feats: ['Everything in Lite', 'Built for networkers', 'First dibs on new features', '$59/month'] },
+  { name: 'TEAM', price: 'custom', per: '', count: '∞', rot: -0.8, cta: 'Schedule a meeting', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
+    days: kipMonth({ 2: 3, 5: 2, 8: 3, 12: 2, 15: 3, 17: 2, 20: 3, 22: 2, 26: 3, 29: 2 }),
+    feats: ['Team analytics', 'Prospect event intuition', 'Auto-host prospect events'] }
 ];
 
 var KIP_FAQS = [
@@ -995,12 +999,12 @@ class Component extends DCLogic {
         window.__kipPlanA = pa;
         window.__kipPlan = function (i) { self.planA = i < 0 ? 0 : (i > KIP_PLANS.length - 1 ? KIP_PLANS.length - 1 : i); self.forceUpdate(); };
         return KIP_PLANS.map(function (pl, i) {
-          var d = i - pa, ad = Math.abs(d);
+          var d = i - pa, ad = Math.abs(d), dc = Math.max(-2, Math.min(2, d)), adc = Math.abs(dc);
           return Object.assign({}, pl, {
             countSize: pl.count === '∞' ? 72 : 42,
             isActive: d === 0, z: 10 - ad,
-            tx: d * 34, ty: ad * -6, sc: (1 - ad * 0.055).toFixed(3),
-            op: d === 0 ? 1 : 0.62,
+            tx: dc * 34, ty: adc * -6, sc: (1 - adc * 0.055).toFixed(3),
+            op: d === 0 ? 1 : (ad > 2 ? 0 : 0.62),
             dotW: d === 0 ? 22 : 8, dotBg: d === 0 ? '#7466AA' : '#D8CDB9',
             pick: function () { self.planA = i; self.forceUpdate(); }
           });
@@ -1009,6 +1013,7 @@ class Component extends DCLogic {
       planPrev: function () { if (planA > 0) { self.planA = planA - 1; self.forceUpdate(); } },
       planNext: function () { if (planA < planLast) { self.planA = planA + 1; self.forceUpdate(); } },
       planPrevOp: planA > 0 ? 1 : 0.25, planNextOp: planA < planLast ? 1 : 0.25,
+      planName: (KIP_PLANS[planA] || KIP_PLANS[0]).name,
       faqs: KIP_FAQS,
       parBg: Math.round((0.5 - sp.p) * 260), parFg: Math.round((0.5 - sp.p) * 90),
       spend1: SPEND1.slice(0, c1), spend2: SPEND2.slice(0, c2),
