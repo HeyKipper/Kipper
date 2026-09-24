@@ -369,6 +369,7 @@ call grandma back sunday!!
 </div>
 <div style="padding-bottom: 14px; border-bottom: 2px solid #1E1B16; text-align: center;">
 <div style="display: inline-flex; align-items: flex-end; gap: 5px;"><span style="font-family: 'Instrument Serif', serif; font-size: 54px; line-height: 0.9; letter-spacing: -1.5px;">{{p.price}}</span><span style="font-size: 15px; color: #4A443B; padding-bottom: 6px;">{{p.per}}</span></div>
+<sc-if value="{{p.hasSub}}" hint-placeholder-val="{{ true }}"><div style="margin-top: 7px; font-size: 16px; font-weight: 600; color: #1E1B16;">{{p.sub}}</div></sc-if>
 </div>
 <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; color: #7A7166; text-align: center;">
 <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
@@ -644,10 +645,10 @@ var KIP_PLANS = [
   { name: 'FREE', price: '$0', per: 'forever', count: '8', rot: -1, cta: 'Start free', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 3: 2, 9: 1, 16: 2, 22: 1, 29: 2 }),
     feats: ['Unlimited suggestions', 'Friends, family & networking', 'Plan with your partner (free)'] },
-  { name: 'LITE', price: '$29', per: '/ month', count: '20', rot: 0.5, cta: 'Get Lite', btnBg: '#1E1B16', btnInk: '#FFFDF8', rings: RINGS8,
+  { name: 'LITE', price: '~$1', per: '/ day', sub: '$29 billed monthly', count: '20', rot: 0.5, cta: 'Get Lite', btnBg: '#1E1B16', btnInk: '#FFFDF8', rings: RINGS8,
     days: kipMonth({ 1: 2, 6: 3, 10: 2, 14: 2, 19: 3, 22: 2, 27: 2, 30: 2, 31: 2 }),
     feats: ['Everything in Free', 'Group plans & invites', 'Kipper learns faster'] },
-  { name: 'PRO', price: '$49', per: '/ month', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
+  { name: 'PRO', price: '~$2', per: '/ day', sub: '$59 billed monthly', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 1: 2, 3: 1, 6: 2, 7: 1, 9: 2, 12: 1, 13: 2, 15: 1, 17: 2, 20: 1, 21: 2, 23: 2, 26: 1, 27: 2, 29: 1, 30: 2 }),
     feats: ['Everything in Lite', 'Built for networkers & sellers', 'First dibs on new features'] }
 ];
@@ -999,6 +1000,7 @@ class Component extends DCLogic {
           return Object.assign({}, pl, {
             countSize: pl.count === '∞' ? 72 : 42,
             countStroke: pl.count === '∞' ? '2.5px' : '0',
+            hasSub: !!pl.sub,
             isActive: d === 0, z: 10 - ad,
             tx: d * 34, ty: ad * -6, sc: (1 - ad * 0.055).toFixed(3),
             op: d === 0 ? 1 : 0.62,
