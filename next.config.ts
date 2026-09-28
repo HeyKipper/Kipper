@@ -1,7 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return {
+      // beforeFiles so the landing export wins at "/" regardless of app routes.
+      beforeFiles: [
+        { source: "/", destination: "/landing/index.html" },
+        { source: "/m", destination: "/landing/m/index.html" },
+        { source: "/m/", destination: "/landing/m/index.html" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
 };
 
 export default nextConfig;

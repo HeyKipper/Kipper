@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Prebuilt static landing page — vendor output, not source we maintain,
+    // plus the copies sync-landing.mjs places in public/.
+    "landing/**",
+    "public/landing/**",
+    "public/ds/**",
+    "public/support.js",
   ]),
 ]);
 
