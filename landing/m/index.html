@@ -6,6 +6,11 @@
 <meta name="description" content="Kipper is your AI friend who plans your week: finds experiences you'll love, keeps you close to your people, and helps you spend your time on purpose.">
 <script>(function(){try{var m=(window.innerWidth||document.documentElement.clientWidth)<860,onM=location.pathname.indexOf("/m")===0;if(m&&!onM)location.replace("/m/"+location.hash);else if(!m&&onM)location.replace("/"+location.hash);}catch(e){}})();</script>
 <title>Kipper — mobile</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#F4EEE3">
 <script src="/support.js"></script>
 <script src="/ds/kipper/components/bundle.js"></script>
 <script>(function(){var d=document,r=d.documentElement;function isF(t){return t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA');}
@@ -368,7 +373,8 @@ call grandma back sunday!!
 <sc-for list="{{p.rings}}" as="rg" hint-placeholder-count="8"><div style="width: 11px; height: 26px; border-radius: 6px; background: linear-gradient(90deg, #8B8F95, #D7DADF 50%, #8B8F95); box-shadow: 0 2px 3px rgba(0,0,0,0.2);"></div></sc-for>
 </div>
 <div style="padding-bottom: 14px; border-bottom: 2px solid #1E1B16; text-align: center;">
-<div style="display: inline-flex; align-items: flex-end; gap: 5px;"><span style="font-family: 'Instrument Serif', serif; font-size: 54px; line-height: 0.9; letter-spacing: -1.5px;">{{p.price}}</span><span style="font-size: 15px; color: #4A443B; padding-bottom: 6px;">{{p.per}}</span></div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #4A443B;">{{p.name}}</div>
+<div style="display: inline-flex; margin-top: 4px; align-items: flex-end; gap: 5px;"><span style="font-family: 'Instrument Serif', serif; font-size: 54px; line-height: 0.9; letter-spacing: -1.5px;">{{p.price}}</span><span style="font-size: 15px; color: #4A443B; padding-bottom: 6px;">{{p.per}}</span></div>
 </div>
 <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px; color: #7A7166; text-align: center;">
 <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
@@ -641,15 +647,15 @@ function kipFmtPhone(d) {
   return '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
 }
 var KIP_PLANS = [
-  { name: 'FREE', price: '$0', per: 'forever', count: '8', rot: -1, cta: 'Start free', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
+  { name: 'FREE', price: '$0', per: 'forever', count: '8', rot: -1, cta: 'Join Free', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 3: 2, 9: 1, 16: 2, 22: 1, 29: 2 }),
     feats: ['Unlimited suggestions', 'Friends, family & networking', 'Plan with your partner (free)'] },
-  { name: 'LITE', price: '$29', per: '/ month', count: '20', rot: 0.5, cta: 'Get Lite', btnBg: '#1E1B16', btnInk: '#FFFDF8', rings: RINGS8,
+  { name: 'LITE', price: '~$1', per: '/ day', count: '20', rot: 0.5, cta: '7 Day Free Trial', btnBg: '#1E1B16', btnInk: '#FFFDF8', rings: RINGS8,
     days: kipMonth({ 1: 2, 6: 3, 10: 2, 14: 2, 19: 3, 22: 2, 27: 2, 30: 2, 31: 2 }),
-    feats: ['Everything in Free', 'Group plans & invites', 'Kipper learns faster'] },
-  { name: 'PRO', price: '$49', per: '/ month', count: '∞', rot: 1.2, cta: 'Go Pro', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
+    feats: ['$29/month', 'Everything in Free', 'Group plans & invites', 'Kipper learns faster'] },
+  { name: 'PRO', price: '~$2', per: '/ day', count: '∞', rot: 1.2, cta: '7 Day Free Trial', btnBg: '#FFFDF8', btnInk: '#1E1B16', rings: RINGS8,
     days: kipMonth({ 1: 2, 3: 1, 6: 2, 7: 1, 9: 2, 12: 1, 13: 2, 15: 1, 17: 2, 20: 1, 21: 2, 23: 2, 26: 1, 27: 2, 29: 1, 30: 2 }),
-    feats: ['Everything in Lite', 'Built for networkers & sellers', 'First dibs on new features'] }
+    feats: ['$59/month', 'Everything in Lite', 'Built for networkers & sellers', 'First dibs on new features'] }
 ];
 
 var KIP_FAQS = [
